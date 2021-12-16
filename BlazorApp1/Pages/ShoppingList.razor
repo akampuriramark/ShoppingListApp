@@ -1,0 +1,78 @@
+﻿@page "/shoppinglist"
+@layout ShoppingListLayout
+@using BlazorApp1.Data
+
+<PageTitle>@title</PageTitle>
+<h3>ShoppingList</h3>
+
+<EditForm Model="@grocery" OnValidSubmit="@AddGrocery">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Name:
+            <InputText @bind-Value="grocery.Name" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Price:
+            <InputNumber @bind-Value="grocery.Price" />
+        </label>
+    </p>
+
+    <button type="submit">Add Grocery</button>
+
+</EditForm>
+
+<table class="table table-sm">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+    @foreach (var grocery in groceries)
+    {
+        <Item GroceryItem="@grocery" OnGroceryPriceIncreased="OnGroceryPriceIncreased" />
+    }
+</table>
+
+<h3>Total (@sum)</h3>
+
+
+@code {
+
+    // our page title
+    private string title = "Our Groceries";
+    // The list of groceries on our shopping list is intialize here
+    private List<Grocery> groceries = new();
+    // total amount of shopping list items
+    private double sum = 0;
+    // form model
+    private Grocery grocery = new();
+
+    // method executed to add a grocery to the list
+    private void AddGrocery()
+    {
+
+        // add our grocery to the list
+        groceries.Add(grocery);
+        // reset the grocery object for a new one to be added
+        grocery = new();
+        // calculate total amount after adding
+        UpdateTotalAmount();
+    }
+    // method to calculate total sum of all groceries
+    public void UpdateTotalAmount()
+    {
+        sum = groceries.Sum(x => x.Price);
+    }
+
+    // method to be executed by callback handler when a grocery price is increased
+    public void OnGroceryPriceIncreased()
+    {
+        // update the total amount
+        UpdateTotalAmount();
+    }
+}

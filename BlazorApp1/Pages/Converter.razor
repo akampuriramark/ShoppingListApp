@@ -1,0 +1,49 @@
+﻿@page "/converter"
+
+<h3>Converter</h3>
+
+<label>KG</label>
+
+<input type="number" @bind-value="@Kilos" @bind-value:event="oninput" />
+
+<span> = </span>
+
+<input type="number" @bind-value="@Grams" @bind-value:event="oninput" />
+
+<label>g</label>
+
+@code {
+
+    // number of Kilograms to convert to grams
+    private double kilos = 1;
+    // number of grams to convert to Kilograms
+    private double grams = 1000;
+
+    // property to convert Kilograms to grams
+    public double Kilos
+    {
+        // get the value entered as kilos
+        get => kilos;
+        set
+        {
+            // set the new value of grams by multiplying Kilograms by 1000
+            grams = value * 1000;
+            // set kilograms
+            kilos = value;
+        }
+    }
+
+    // property to convert grams to Kilograms
+    public double Grams
+    {
+        // get the value entered as grams
+        get => grams;
+        set
+        {
+            // set the new value of Kilograms by dividing grams by 1000
+            kilos = value / 1000;
+            // set grams
+            grams = value;
+        }
+    }
+}
